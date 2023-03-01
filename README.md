@@ -2,26 +2,25 @@
 
 Link to the original repository: https://github.com/vrjkmr/arxiv-topic
 
-For now:
+### For now:
+At the moment, we select the page we want to read and work on it using utils.py -> def load_arxiv_metadata(path). Each page will be treated as a different document (we can join them later).
 
-In the moment we select the page we want to read and work on it. utils.py -> def load_arxiv_metadata(path):
-Each page will be treated as a different document (we can make a .join late)
+After reading, we perform the following steps:
+[1/6] Removing LaTeX equations...
+[2/6] Removing newlines and extra spaces...
+[3/6] Tokenizing documents...
+[4/6] Removing stopwords...
+[5/6] Identifying n-gram phrases...
+[6/6] Lemmatizing...
 
-After the reading we make these steps: 
- [1/6] Removing LaTex equations...
- [2/6] Removing newlines and extra spaces...
- [3/6] Tokenizing documents...
- [4/6] Removing stopwords...
- [5/6] Identifying n-gram phrases...
- [6/6] Lemmatizing...
+To do that, I had to make changes to the files: Dataset preparation.ipynb, dataset.py, and utils.py.
  
- To do that i had to change the files Dataset preparation.ipynb, dataset.py and utils.py
  
-TO DO:
-Make a way to read all the courses informations between beginning with Description until Class Components
+### TO DO:
+Make a way to read all the course information beginning with "Description" and ending with "Class Components".
 
 
-
+## Original Readme: 
 
 This repository contains the code for a [Latent Dirichlet Allocation (LDA)](https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf) topic model built and trained on the abstracts of ~160,000 ML-related research papers from the [ArXiv.org dataset](https://www.kaggle.com/Cornell-University/arxiv) on Kaggle.
 
