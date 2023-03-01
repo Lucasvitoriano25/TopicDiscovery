@@ -2,6 +2,11 @@
 
 Link to the original repository: https://github.com/vrjkmr/arxiv-topic
 
+### Befor running it you may have to do: 
+
+python3 -m spacy download en_core_web_sm
+python3 -m nltk.downloader stopwords
+
 ### For now:
 At the moment, we select the page we want to read and work on it using utils.py -> def load_arxiv_metadata(path). Each page will be treated as a different document (we can join them later).
 
