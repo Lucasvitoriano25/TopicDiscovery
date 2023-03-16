@@ -1,4 +1,30 @@
-# ArXiv Topic Modeling
+# Topic Modeling
+
+Link to the original repository: https://github.com/vrjkmr/arxiv-topic
+
+Befor running it you may have to do:
+python3 -m spacy download en_core_web_sm python3 -m nltk.downloader stopwords
+
+### For now:
+
+For the moment we separate the catalog in courses (selecting by hand the interval of pages relationed to each course)
+
+With the files saved we can read it and pass trough our model, getting a coherence of: 0.3803
+
+
+After reading, we perform the following steps: [1/6] Removing LaTeX equations... [2/6] Removing newlines and extra spaces... [3/6] Tokenizing documents... [4/6] Removing stopwords... [5/6] Identifying n-gram phrases... [6/6] Lemmatizing...
+
+To do that, I had to make changes to the files: Dataset preparation.ipynb, dataset.py, and utils.py.
+
+### TO DO:
+
+Make a way to read all the catalog and separate the courses by his identifier ex: 2CC1005
+
+Test with the pre-processing of Ingrid
+
+Increase somehow the coherence of the model 
+
+## Original Readme:
 
 This repository contains the code for a [Latent Dirichlet Allocation (LDA)](https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf) topic model built and trained on the abstracts of ~160,000 ML-related research papers from the [ArXiv.org dataset](https://www.kaggle.com/Cornell-University/arxiv) on Kaggle.
 
