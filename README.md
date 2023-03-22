@@ -18,9 +18,9 @@ To do that, I had to make changes to the files: Dataset preparation.ipynb, datas
 
 ### TO DO:
 
-Make a way to read all the catalog and separate the courses by his identifier ex: 2CC1005
+Improve the preprocessing removing words that doesnt add that much iniformation: course, english, gif, metz, ...
 
-Test with the pre-processing of Ingrid
+Find a way to no longer need to remove the first pages of the pdf 
 
 Increase somehow the coherence of the model 
 

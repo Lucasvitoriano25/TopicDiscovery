@@ -19,9 +19,7 @@ def load_arxiv_metadata(dir_path):
             reader = PdfReader(dir_path + file)
             for i in range(len(reader.pages)):
                 text_of_file = text_of_file + reader.pages[i].extract_text()
-            print(text_of_file)
         texts.append(text_of_file)
-    print()
     return texts
 def extract_abstracts(metadata,
                       categories=["cs.AI", "cs.GT", "cs.CV", "cs.IR",
