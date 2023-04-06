@@ -33,7 +33,7 @@ class TopicModel:
         self.dataset = ArXivDataset.load(dataset_path)
         self.num_topics = self.model.num_topics
         self.topic_names = list(range(self.num_topics))
-        self.topics = self.model.show_topics(num_topics=self.num_topics)
+        self.topics = self.model.show_topics(num_topics=self.num_topics, formatted = False)
 
     def set_topic_names(self, names):
         """Assign topic names."""
@@ -46,9 +46,25 @@ class TopicModel:
     def predict(self, text):
         """Predict topics for a piece of text."""
         bow_transformed = self.dataset.transform([text])[0]
-        topic_predictions = self.model.get_document_topics(bow_transformed)
+        topic_predictions = self.model.get_document_topics(bow_transformed, minimum_probability = 0)
         sorted_predictions = sorted(topic_predictions, key=lambda x: x[1],
                                     reverse=True)
         sorted_predictions = [(self.topic_names[topic_idx], prob)
-                              for (topic_idx, prob) in sorted_predictions]
+                              for (topic_idx, prob) in sorted_predictions] 
+
         return sorted_predictions
+    
+    def predictToChart(self, text):
+        """Predict topics for a piece of text."""
+        bow_transformed = self.dataset.transform([text])[0]
+        topic_predictions = self.model.get_document_topics(bow_transformed, minimum_probability = 0)
+        sorted_predictions = sorted(topic_predictions, key=lambda x: x[1],
+                                    reverse=True)
+        """ sorted_predictions = [(self.topic_names[topic_idx], prob)
+                              for (topic_idx, prob) in sorted_predictions] """
+        Top5TopicNames = []
+        Top5Probs = []
+        for (topic_idx, prob) in sorted_predictions[:5]:
+            Top5TopicNames.append(self.topic_names[topic_idx])
+            Top5Probs.append(prob)
+        return (Top5TopicNames,Top5Probs)  
