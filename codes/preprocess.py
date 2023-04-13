@@ -69,18 +69,20 @@ class ArXivPreprocessor:
         self.nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
 
         # fit-transform documents
-        print(" [1/6] Removing LaTex equations...")
+        print(" [1/7] Removing LaTex equations...")
         documents = self.remove_latex_equations(documents)
-        print(" [2/6] Removing newlines and extra spaces...")
+        print(" [2/7] Removing newlines and extra spaces...")
         documents = self.remove_newlines(documents)
-        print(" [3/6] Tokenizing documents...")
+        print(" [3/7] Tokenizing documents...")
         documents = self.tokenize(documents)
-        print(" [4/6] Removing stopwords...")
+        print(" [4/7] Removing stopwords...")
         documents = self.remove_stopwords(documents, self.stopwords)
-        print(" [5/6] Identifying n-gram phrases...")
+        print(" [5/7] Identifying n-gram phrases...")
         documents = self.identify_phrases(documents)
-        print(" [6/6] Lemmatizing...")
+        print(" [6/7] Lemmatizing...")
         documents = self.lemmatize(documents, self.pos_tags)
+        print(" [7/7] Removing Common Words...")
+        documents = self.remove_words(documents)
         print(" Done.")
         return documents
 
@@ -104,6 +106,7 @@ class ArXivPreprocessor:
         documents = self.remove_stopwords(documents, self.stopwords)
         documents = self.identify_phrases(documents, fit=False)
         documents = self.lemmatize(documents, self.pos_tags)
+        documents = self.remove_words(documents)
         return documents
 
     def remove_latex_equations(self, documents):
@@ -159,3 +162,9 @@ class ArXivPreprocessor:
             lemmatized.append([token.lemma_ for token in tokens
                                if token.pos_ in pos_tags])
         return lemmatized
+    def remove_words(self,documents):
+        newdoc = []
+        wordstoremove = ["course","student", "end", "day", "campus", "group", "part"]
+        for doc in documents:
+            newdoc.append([i for i in doc if not (i in wordstoremove)])
+        return newdoc
