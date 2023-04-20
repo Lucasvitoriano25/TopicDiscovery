@@ -26,7 +26,7 @@ class ArXivPreprocessor:
     def __init__(self):
         pass
 
-    def fit_transform(self,
+    def     fit_transform(self,
                       documents,
                       additional_stopwords=[],
                       max_n=3,

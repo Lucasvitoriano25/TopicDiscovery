@@ -54,17 +54,16 @@ class TopicModel:
 
         return sorted_predictions
     
-    def predictToChart(self, text):
+    def predictTopTopics(self, text, numberOfTopics = 5):
         """Predict topics for a piece of text."""
         bow_transformed = self.dataset.transform([text])[0]
         topic_predictions = self.model.get_document_topics(bow_transformed, minimum_probability = 0)
         sorted_predictions = sorted(topic_predictions, key=lambda x: x[1],
                                     reverse=True)
-        """ sorted_predictions = [(self.topic_names[topic_idx], prob)
-                              for (topic_idx, prob) in sorted_predictions] """
-        Top5TopicNames = []
-        Top5Probs = []
-        for (topic_idx, prob) in sorted_predictions[:5]:
-            Top5TopicNames.append(self.topic_names[topic_idx])
-            Top5Probs.append(prob)
-        return (Top5TopicNames,Top5Probs)  
+
+        TopTopicNames = []
+        TopProbs = []
+        for (topic_idx, prob) in sorted_predictions[:numberOfTopics]:
+            TopTopicNames.append(self.topic_names[topic_idx])
+            TopProbs.append(prob)
+        return (TopTopicNames,TopProbs)  
