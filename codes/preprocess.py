@@ -26,7 +26,7 @@ class ArXivPreprocessor:
     def __init__(self):
         pass
 
-    def     fit_transform(self,
+    def fit_transform(self,
                       documents,
                       additional_stopwords=[],
                       max_n=3,
@@ -69,19 +69,23 @@ class ArXivPreprocessor:
         self.nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
 
         # fit-transform documents
-        print(" [1/7] Removing LaTex equations...")
+        print(" [1/9] Removing headings...")
+        documents = self.remove_heading(documents)
+        print(" [2/9] Removing gradings, resources and course support...")
+        documents = self.remove_useless_info(documents)
+        print(" [3/9] Removing LaTex equations...")
         documents = self.remove_latex_equations(documents)
-        print(" [2/7] Removing newlines and extra spaces...")
+        print(" [4/9] Removing newlines and extra spaces...")
         documents = self.remove_newlines(documents)
-        print(" [3/7] Tokenizing documents...")
+        print(" [5/9] Tokenizing documents...")
         documents = self.tokenize(documents)
-        print(" [4/7] Removing stopwords...")
+        print(" [6/9] Removing stopwords...")
         documents = self.remove_stopwords(documents, self.stopwords)
-        print(" [5/7] Identifying n-gram phrases...")
+        print(" [7/9] Identifying n-gram phrases...")
         documents = self.identify_phrases(documents)
-        print(" [6/7] Lemmatizing...")
+        print(" [8/9] Lemmatizing...")
         documents = self.lemmatize(documents, self.pos_tags)
-        print(" [7/7] Removing Common Words...")
+        print(" [9/9] Removing common words...")
         documents = self.remove_words(documents)
         print(" Done.")
         return documents
@@ -99,7 +103,8 @@ class ArXivPreprocessor:
         documents : array_like
             Tokenized and pre-processed documents.
         """
-
+        documents = self.remove_heading(documents)
+        documents = self.remove_useless_info(documents)
         documents = self.remove_latex_equations(documents)
         documents = self.remove_newlines(documents)
         documents = self.tokenize(documents)
@@ -162,9 +167,36 @@ class ArXivPreprocessor:
             lemmatized.append([token.lemma_ for token in tokens
                                if token.pos_ in pos_tags])
         return lemmatized
+    def remove_heading(self, documents):
+        new_lst = []
+        for i in range(len(documents)):
+            text = documents[i].strip().replace('\\n', '\n').replace('\\xa0', ' ')
+            lines = text.splitlines()
+            # Remove the entire line containing 'Instructors:'
+            lines = [line for line in lines if "Instructors" not in line and "Department" not in line and "Campus" not in line and "Language\xa0of\xa0instruction" not in line and"Workload" not in line and "On\xadsite\xa0hours" not in line]
+            # Convert the list back to string
+            text = '\n'.join(lines)
+            # Append the modified string to a new list
+            new_lst.append(text)
+        return new_lst
+    
+    def remove_useless_info(self, documents):
+        new_lst = []
+        for i in range(len(documents)):
+            text = documents[i].strip().replace('\\n', '\n').replace('\\xa0', ' ')
+            result = re.sub(r'(Class\xa0components\xa0\(lecture,\xa0labs,\xa0etc.\))(.*?)(Grading)', r'\1\n\3', text, flags=re.DOTALL)
+            result = re.sub(r'(Grading)(.*?)(Resources)', r'\1\n\3', result, flags=re.DOTALL)
+            result = re.sub(r'(Grading)(.*?)(Course\xa0support)', r'\1\n\3', result, flags=re.DOTALL)
+            result = re.sub(r'(Course\xa0support)(.*?)(Resources)', r'\1\n\3', result, flags=re.DOTALL)
+            result = re.sub(r'(Resources)(.*?)(Learning\xa0outcomes\xa0covered\xa0on\xa0the\xa0course)', r'\1\n\3', result, flags=re.DOTALL)
+            # Append the modified string to a new list
+            new_lst.append(result)
+        return new_lst
+    
     def remove_words(self,documents):
         newdoc = []
-        wordstoremove = ["course","student", "end", "day", "campus", "group", "part"]
+        wordstoremove = ["course","student", "end", "day", "campus", "group", "part","grading","class","components","resources","learning","outcomes","covered","support"]
         for doc in documents:
             newdoc.append([i for i in doc if not (i in wordstoremove)])
         return newdoc
+    

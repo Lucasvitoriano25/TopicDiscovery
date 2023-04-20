@@ -7,10 +7,9 @@ python3 -m spacy download en_core_web_sm python3 -m nltk.downloader stopwords
 
 ### For now:
 
-For the moment we separate the catalog in courses (selecting by hand the interval of pages relationed to each course)
+For the moment we've separated the catalog in courses with the CreateCourseFolder.ipynb.
 
-With the files saved we can read it and pass trough our model, getting a coherence of: 0.3803
-
+With the files saved we can read them and pass them trough our model, getting a coherence of: 0.3803.
 
 After reading, we perform the following steps: 
  [1/9] Removing headings...
@@ -23,7 +22,7 @@ After reading, we perform the following steps:
  [8/9] Lemmatizing...
  [9/9] Removing common words...
 
-To do that, I had to make changes to the files: Dataset preparation.ipynb, dataset.py, preprocess.py and utils.py.
+To do that, we had to make some changes to the files: Dataset preparation.ipynb, dataset.py, preprocess.py and utils.py.
 
 ## Original Readme:
 
